@@ -4,7 +4,14 @@ import guru.springframework.sfgdi.controllers.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
+
+/* We are dependant on the default package scan that is look in this package */
+
+
+// However, you can use the component scan implementation to tell spring where to look - Common to do with Enterprise development //
+//@ComponentScan(basePackages = {"guru.springframework.sfgdi", "com.springframework.pets"}) -- No component scan need because of the java config injecting class.
 @SpringBootApplication
 public class SfgDiApplication {
 

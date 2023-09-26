@@ -3,18 +3,34 @@ package guru.springframework.sfgdi.config;
 import com.springframework.pets.DogPetService;
 import com.springframework.pets.PetService;
 import com.springframework.pets.PetServiceFactory;
+import guru.springframework.sfgdi.datasource.FakeDataSource;
 import guru.springframework.sfgdi.repository.EnglishGreetingRepository;
 import guru.springframework.sfgdi.repository.EnglishGreetingRepositoryImpl;
 import guru.springframework.sfgdi.services.*;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Service;
 
-// You can put this here or on the main applicaiton class as it is considered a config class.
+// You can put this here or on the main application class as it is considered a config class.
+//@PropertySource("classpath:datasource.properties") -- using spring boot now. removed datasource.properties
+@EnableConfigurationProperties(SfgConstructorConfig.class)
 @ImportResource("classpath:sfgdi-config.xml")
 @Configuration
 public class GreetingServiceConfig {
 
-    // Once you annotate it as a bean it breing it back into context
+    //Using the value annotation. Remember to use object notation for this annotation - common mistake.
+    // Without the bracket it gets evaluated at a string. Env vars are read at runtime
+    @Bean
+    FakeDataSource fakeDataSource(SfgConfiguration sfgConfiguration){
+        FakeDataSource fakeDataSource = new FakeDataSource();
+        fakeDataSource.setUsername(sfgConfiguration.getUsername());
+        fakeDataSource.setPassword(sfgConfiguration.getPassword());
+        fakeDataSource.setJdbcurl(sfgConfiguration.getJdbcurl());
+        return fakeDataSource;
+    }
+
+    // Once you annotate it as a bean it brings it back into context
     @Bean
     PetServiceFactory PetServiceFactory(){
         return new PetServiceFactory();
